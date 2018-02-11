@@ -48,8 +48,8 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #101050;
-  color: #FFF;
+  background-color: #730DBC;
+  color: #EEE;
 }
 
 .text {

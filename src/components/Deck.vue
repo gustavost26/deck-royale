@@ -1,45 +1,89 @@
 <template>
-  <section class='app-deck container-fluid'>
+  <section class='app-deck container-fluid' ref='root'>
     <div class='row'>
-      <div class='col-12 col-lg-8 container-fluid'>
+      <div class='col-12'>
+        <section id='list-mode' class='my-3'>
+          <button
+            v-on:click='toggleListMode()'
+            class='btn btn-royale btn-sm'
+          >
+            <img :src='
+              listMode === "full"
+                ? "/static/list.svg"
+                : "/static/grid-three-up.svg"
+              '
+              alt='Toggle view'
+              style='height: 1em'
+            >
+            Toggle view
+          </button>
+          <button
+            v-on:click='shuffle()'
+            class='btn btn-warning btn-sm'
+          >
+            <img src='/static/random.svg' alt='Shuffle!' style='height: 1em'>
+            Shuffle!
+          </button>
+          <popper trigger='click' :options='{ placement: "bottom" }'>
+            <div class='popper'>
+              <section id='deck-code-info' class='m-2'>
+                <h5>Copied to clipboard!</h5>
+                <p>You can paste this code in the box to the right
+                to see this deck anytime.</p>
+              </section>
+            </div>
+            <button slot='reference' class='btn btn-royale btn-sm'
+              v-on:click='copyDeckUrl()'
+            >
+              <img src='/static/clipboard.svg' alt='Copy' style='height: 1em'>
+              Copy deck code
+            </button>
+          </popper>
+          <input type='text' :value='deckCode'
+            class='text-muted btn btn-sm'
+            id='deck-code-output'
+            v-on:click='copyDeckUrl()'
+            v-on:input='loadDeckCode($event.target.value)'>
+          <div class="fb-share-button btn btn-sm"
+              :data-href="deckUrl" data-layout="button"
+              data-size="small" data-mobile-iframe="true">
+            <a target="_blank" class="fb-xfbml-parse-ignore btn btn-info btn-sm"
+              :href="fbShareUrl">Share this deck</a>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-12 container-fluid'>
         <div class='row align-items-center'>
           <div
             v-for='(slot, i) in shuffleCurrent'
             :key='i'
-            class='col-6 col-sm-6 col-md-3 border-0'
-            :class='"slot" + i'
+            :class='{
+              ["slot" + i]: true,
+              "col-6": listMode === "full",
+              "col-sm-6": listMode === "full",
+              "col-md-3": listMode === "full",
+              "col-12": listMode === "list",
+            }'
           >
             <Card
               v-for='(card, j) in shuffleCards'
-              class='card'
+              class='v-card'
               :class='{ selected: j === slot && shuffling }'
               :card='card'
               :key='j'
+              :mode='listMode'
             />
             <Card
               v-if='suggestedDeck'
-              class='card'
+              class='v-card'
               :class='{ selected: !shuffling }'
               :card='suggestedDeck[i]'
+              :mode='listMode'
             />
           </div>
         </div>
-      </div>
-      <div class='col-12 col-lg-4'>
-        <section id='shuffle' class='mt-3'>
-          <h2>Shuffle me!</h2>
-          <button v-on:click='shuffle()' class='btn btn-primary btn-sm'>Do it</button>
-        </section>
-        <section id='load-deck' class='load-from-base64 mt-3'>
-          <h2>Load deck code</h2>
-          <p>You can copy the deck code below and paste it again
-          when you want to see the current deck. This way you can even share it
-          with your friends!</p>
-          <p>
-            <input class='form-control' v-model='deckCode'
-              v-on:click='$event.target.select()' v-on:input='loadDeckCode($event.target.value)'>
-          </p>
-        </section>
       </div>
     </div>
   </section>
@@ -47,12 +91,14 @@
 
 <script>
 import * as b64 from 'base-64';
+import Popper from 'vue-popperjs';
+import 'vue-popperjs/dist/css/vue-popper.css';
 
 import Card from './Card';
 
 export default {
   props: ['cards'],
-  components: { Card },
+  components: { Card, Popper },
   data() {
     return {
       shuffleCards: [],
@@ -68,6 +114,7 @@ export default {
         this.cards[7],
       ],
       shuffling: false,
+      listMode: 'full',
     };
   },
   computed: {
@@ -75,6 +122,12 @@ export default {
       return b64.encode(
         this.suggestedDeck.map(card => card.idName).join(','),
       );
+    },
+    deckUrl() {
+      return window.location.href;
+    },
+    fbShareUrl() {
+      return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.deckUrl)}`;
     },
   },
   mounted() {
@@ -91,6 +144,19 @@ export default {
     addEventListener('hashchange', hashWatch);
   },
   methods: {
+    copyDeckUrl() {
+      this.$refs.root.querySelector('#deck-code-output')
+        .select();
+
+      document.execCommand('copy');
+    },
+    toggleListMode() {
+      if (this.listMode === 'list') {
+        this.listMode = 'full';
+      } else {
+        this.listMode = 'list';
+      }
+    },
     loadDeckCode(b64str) {
       const names = b64.decode(b64str).split(',');
       const cards = names.map(name => this.cards.find(card => card.idName === name));
@@ -127,7 +193,7 @@ export default {
           return;
         }
 
-        this.shuffling = true; // Every day I'm S H U F F L I N
+        this.shuffling = true; // Every day I'm shufflin'
         this.shuffleCurrent = this.shuffleCurrent.map(
           (num) => {
             if (num < this.shuffleCards.length - 1) {
@@ -147,7 +213,6 @@ export default {
 
       for (let i = 0; i < cardAmt; i += 1) {
         let r = random();
-
         while (indexes.includes(r)) {
           r = random();
         }
@@ -171,13 +236,31 @@ export default {
   height: 100vh;
 }
 
-.card {
+.v-card {
   display: none;
   max-width: 100%;
   transition: top 1s, left 1s;
 }
 
-.card.selected {
+.v-card.selected {
   display: block;
+}
+
+.overflow {
+  overflow: auto;
+  max-height: 100vh;
+}
+
+.btn-royale {
+  background-color: #B87DE2;
+}
+
+.btn-royale:hover {
+  background-color: #9D52D3;
+}
+
+::selection {
+  background-color: #9D52D3;
+  color: #EEE;
 }
 </style>
