@@ -35,7 +35,7 @@ export default {
       else canLoad = true;
     }, 3000);
 
-    axios.get('http://www.clashapi.xyz/api/cards')
+    axios.get('//www.clashapi.xyz/api/cards')
       .then(
         (res) => {
           if (canLoad) this.loaded = true;
