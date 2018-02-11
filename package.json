@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "base-64": "^0.1.0",
-    "hash-js": "^1.0.3",
+    "express": "^4.16.2",
     "vue": "^2.5.2"
   },
   "devDependencies": {
