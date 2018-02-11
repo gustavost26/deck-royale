@@ -9,7 +9,12 @@
           <li>
             <h5>{{ card.name }}</h5>
           </li>
-          <li>Cost: {{ card.elixirCost }}<img src='https://upload.wikimedia.org/wikipedia/commons/4/43/Elixir.png' alt='Elixir' class='icon'></li>
+          <li>Cost: {{ card.elixirCost }}
+            <img
+              src='//upload.wikimedia.org/wikipedia/commons/4/43/Elixir.png'
+              alt='Elixir' class='icon'
+            >
+          </li>
           <li>
             <span class='card-type'>{{ card.type }}</span>
             &middot;
@@ -31,7 +36,7 @@ export default {
   },
   computed: {
     source() {
-      return `http://www.clashapi.xyz/images/cards/${this.card.idName}.png`;
+      return `//www.clashapi.xyz/images/cards/${this.card.idName}.png`;
     },
   },
   methods: {
