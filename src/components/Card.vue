@@ -1,11 +1,11 @@
 <template>
   <div ref='root'>
-    <figure class='app-card'>
-      <div class='card-image'>
+    <figure class='app-card border-0'>
+      <div class='v-card-image'>
         <img :src='source' :alt='card.name'>
       </div>
       <figcaption>
-        <ul class='card-info'>
+        <ul class='v-card-info'>
           <li>
             <h5>{{ card.name }}</h5>
           </li>
@@ -16,7 +16,7 @@
             >
           </li>
           <li>
-            <span class='card-type'>{{ card.type }}</span>
+            <span class='v-card-type'>{{ card.type }}</span>
             &middot;
             <span :class='card.rarity'>{{ card.rarity }}</span>
           </li>
@@ -51,23 +51,23 @@ export default {
   position: relative;
 }
 
-.card-image, .card-image img, figcaption, .card-info {
+.v-card-image, .v-card-image img, figcaption, .v-card-info {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.card-image, figcaption {
+.v-card-image, figcaption {
   width: 100%;
   height: 100%;
 }
 
-.card-info {
+.v-card-info {
   width: 100%;
 }
 
-.card-image img {
+.v-card-image img {
   max-width: 100%;
   max-height: 100%;
   position: relative;
@@ -89,18 +89,18 @@ figcaption {
   opacity: 1;
 }
 
-.card-info, .card-info li {
+.v-card-info, .v-card-info li {
   padding: .3em;
   margin: 0;
   list-style: none;
   line-height: 1.25em;
 }
 
-.card-info li {
+.v-card-info li {
   border-bottom: #FFFFFF22 1px solid;
 }
 
-.card-type {
+.v-card-type {
   font-style: italic;
   font-weight: bold;
 }

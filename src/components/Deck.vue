@@ -1,41 +1,46 @@
 <template>
-  <section class='app-deck container-fluid row'>
-    <div class='col-sm-12 col-lg-8 row'>
-      <div
-        v-for='(slot, i) in shuffleCurrent'
-        :key='i'
-        class='col-sm-6 col-md-3'
-        :class='"slot" + i'
-      >
-        <Card
-          v-for='(card, j) in shuffleCards'
-          class='card'
-          :class='{ selected: j === slot && shuffling }'
-          :card='card'
-          :key='j'
-        />
-        <Card
-          v-if='suggestedDeck'
-          class='card'
-          :class='{ selected: !shuffling }'
-          :card='suggestedDeck[i]'
-        />
+  <section class='app-deck container-fluid'>
+    <div class='row'>
+      <div class='col-12 col-lg-8 container-fluid'>
+        <div class='row align-items-center'>
+          <div
+            v-for='(slot, i) in shuffleCurrent'
+            :key='i'
+            class='col-6 col-sm-6 col-md-3 border-0'
+            :class='"slot" + i'
+          >
+            <Card
+              v-for='(card, j) in shuffleCards'
+              class='card'
+              :class='{ selected: j === slot && shuffling }'
+              :card='card'
+              :key='j'
+            />
+            <Card
+              v-if='suggestedDeck'
+              class='card'
+              :class='{ selected: !shuffling }'
+              :card='suggestedDeck[i]'
+            />
+          </div>
+        </div>
       </div>
-    </div>
-    <div class='col-sm-12 col-lg-4'>
-      <section id='shuffle' class='mt-3'>
-        <h2>Shuffle!</h2>
-        <button v-on:click='shuffle()' class='btn btn-success'>Do it!</button>
-      </section>
-      <section id='load-deck' class='load-from-base64 mt-3'>
-        <h2>Load deck code</h2>
-        <p>You can copy the deck code below and paste it again
-        when you want to see the current deck. This way you can even share it with your friends!</p>
-        <p>
-          <input class='form-control' v-model='deckCode'
-            v-on:click='$event.target.select()' v-on:input='loadDeckCode($event.target.value)'>
-        </p>
-      </section>
+      <div class='col-12 col-lg-4'>
+        <section id='shuffle' class='mt-3'>
+          <h2>Shuffle me!</h2>
+          <button v-on:click='shuffle()' class='btn btn-primary btn-sm'>Do it</button>
+        </section>
+        <section id='load-deck' class='load-from-base64 mt-3'>
+          <h2>Load deck code</h2>
+          <p>You can copy the deck code below and paste it again
+          when you want to see the current deck. This way you can even share it
+          with your friends!</p>
+          <p>
+            <input class='form-control' v-model='deckCode'
+              v-on:click='$event.target.select()' v-on:input='loadDeckCode($event.target.value)'>
+          </p>
+        </section>
+      </div>
     </div>
   </section>
 </template>
@@ -78,9 +83,12 @@ export default {
       this.shuffle();
     }
 
-    addEventListener('hashchange', (event) => {
+    const hashWatch = (event) => {
       this.loadDeckCode(event.newURL.substring(event.newURL.indexOf('#') + 1));
-    });
+    };
+
+    removeEventListener('hashchange', hashWatch);
+    addEventListener('hashchange', hashWatch);
   },
   methods: {
     loadDeckCode(b64str) {
