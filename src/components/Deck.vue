@@ -1,5 +1,5 @@
 <template>
-  <section class='app-deck container-fluid' ref='root'>
+  <section class='app-deck container' ref='root'>
     <div class='row'>
       <div class='col-12'>
         <section id='list-mode' class='my-3'>
@@ -46,27 +46,19 @@
             id='deck-code-output'
             v-on:click='copyDeckUrl()'
             v-on:input='loadDeckCode($event.target.value)'>
-          <div class="fb-share-button btn btn-sm"
-              :data-href="deckUrl" data-layout="button"
-              data-size="small" data-mobile-iframe="true">
-            <button class="fb-xfbml-parse-ignore btn btn-info btn-sm"
-              v-on:click="openFbShareUrl()">Share this deck</button>
-          </div>
         </section>
       </div>
     </div>
-    <div class='row'>
+    <div class='fades row' ref='cardList'>
       <div class='col-12 container-fluid'>
-        <div class='row align-items-center'>
+        <div class='row align-items-start'>
           <div
             v-for='(slot, i) in shuffleCurrent'
             :key='i'
             :class='{
               ["slot" + i]: true,
-              "col-6": listMode === "full",
-              "col-sm-6": listMode === "full",
-              "col-md-3": listMode === "full",
-              "col-12": listMode === "list",
+              "col-6 col-sm-6 col-md-3": listMode === "full",
+              "col-12 col-md-6": listMode === "list",
             }'
           >
             <Card
@@ -143,12 +135,6 @@ export default {
     addEventListener('hashchange', hashWatch);
   },
   methods: {
-    openFbShareUrl() {
-      window.open(
-        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.deckUrl)}`,
-        '_blank',
-      );
-    },
     copyDeckUrl() {
       this.$refs.root.querySelector('#deck-code-output')
         .select();
@@ -156,11 +142,19 @@ export default {
       document.execCommand('copy');
     },
     toggleListMode() {
-      if (this.listMode === 'list') {
-        this.listMode = 'full';
-      } else {
-        this.listMode = 'list';
-      }
+      this.$refs.cardList.classList.add('fade');
+
+      setTimeout(() => {
+        if (this.listMode === 'list') {
+          this.listMode = 'full';
+        } else {
+          this.listMode = 'list';
+        }
+
+        setTimeout(() => {
+          this.$refs.cardList.classList.remove('fade');
+        }, 400);
+      }, 400);
     },
     loadDeckCode(b64str) {
       const names = b64.decode(b64str).split(',');
@@ -267,5 +261,13 @@ export default {
 ::selection {
   background-color: #9D52D3;
   color: #EEE;
+}
+
+.fades {
+  transition: opacity 300ms;
+}
+
+.fade {
+  opacity: 0;
 }
 </style>

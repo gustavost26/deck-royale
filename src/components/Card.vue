@@ -4,6 +4,7 @@
       :class='{
         "app-card-list container my-1": mode === "list",
         "app-card p-1": mode === "full",
+        "clearfix": true,
       }'
       v-on:click='moreInfo()'
     >
@@ -16,7 +17,7 @@
       >
         <img :src='source' :alt='card.name' class='py-2'>
       </div>
-      <figcaption class='p-4' v-if='mode === "full"'>
+      <figcaption class='p-1' v-if='mode === "full"'>
         <ul class='v-card-info'>
           <li>
             <h5>{{ card.name }}</h5>
@@ -125,14 +126,16 @@ export default {
   text-align: center;
 }
 
-.app-card figcaption, .app-card .v-card-info {
+.app-card figcaption {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
 }
 
-.app-card .v-card-image, .app-card figcaption {
+.app-card .v-card-image {
   width: 100%;
   height: 100%;
 }
