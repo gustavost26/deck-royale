@@ -27,28 +27,30 @@
           <popper trigger='click' :options='{ placement: "bottom" }'>
             <div class='popper'>
               <section id='deck-code-info' class='m-2'>
-                <h5>Copied to clipboard!</h5>
-                <p>You can paste this code in the box to the right
-                to see this deck anytime.</p>
+                <h5>
+                  <img src='/static/clipboard.svg' alt='Copied' style='height: 1em'>
+                  Copied to clipboard!
+                </h5>
+                <p>The current URL leads to the exact deck you see below.</p>
               </section>
             </div>
             <button slot='reference' class='btn btn-royale btn-sm'
               v-on:click='copyDeckUrl()'
             >
-              <img src='/static/clipboard.svg' alt='Copy' style='height: 1em'>
-              Copy deck code
+              <img src='/static/link-intact.svg' alt='Copy' style='height: 1em'>
+              Get link to deck
             </button>
           </popper>
-          <input type='text' :value='deckCode'
-            class='text-muted btn btn-sm'
+          <input type='text' :value='deckUrl'
+            style='position: fixed; top: 0; left: 0; transform: translateY(-100%);'
             id='deck-code-output'
             v-on:click='copyDeckUrl()'
             v-on:input='loadDeckCode($event.target.value)'>
           <div class="fb-share-button btn btn-sm"
               :data-href="deckUrl" data-layout="button"
               data-size="small" data-mobile-iframe="true">
-            <a target="_blank" class="fb-xfbml-parse-ignore btn btn-info btn-sm"
-              :href="fbShareUrl">Share this deck</a>
+            <button class="fb-xfbml-parse-ignore btn btn-info btn-sm"
+              v-on:click="openFbShareUrl()">Share this deck</button>
           </div>
         </section>
       </div>
@@ -124,10 +126,7 @@ export default {
       );
     },
     deckUrl() {
-      return window.location.href;
-    },
-    fbShareUrl() {
-      return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.deckUrl)}`;
+      return window.location.toString();
     },
   },
   mounted() {
@@ -144,6 +143,12 @@ export default {
     addEventListener('hashchange', hashWatch);
   },
   methods: {
+    openFbShareUrl() {
+      window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.deckUrl)}`,
+        '_blank',
+      );
+    },
     copyDeckUrl() {
       this.$refs.root.querySelector('#deck-code-output')
         .select();

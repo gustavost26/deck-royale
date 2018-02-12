@@ -1,10 +1,22 @@
 <template>
   <div ref='root'>
-    <figure class='app-card' v-if='mode === "full"'>
-      <div class='v-card-image'>
-        <img :src='source' :alt='card.name'>
+    <figure
+      :class='{
+        "app-card-list container my-1": mode === "list",
+        "app-card p-1": mode === "full",
+      }'
+      v-on:click='moreInfo()'
+    >
+      <div
+        :class='{
+          "v-card-thumb float-left": mode === "list",
+          "v-card-image": mode === "full",
+        }'
+        ref='listThumb'
+      >
+        <img :src='source' :alt='card.name' class='py-2'>
       </div>
-      <figcaption class='p-4'>
+      <figcaption class='p-4' v-if='mode === "full"'>
         <ul class='v-card-info'>
           <li>
             <h5>{{ card.name }}</h5>
@@ -23,16 +35,7 @@
           <li class='description'>{{ card.description }}</li>
         </ul>
       </figcaption>
-    </figure>
-    <figure
-      class='app-card-list container-fluid my-1'
-      v-else-if='mode === "list"'
-      v-on:click='moreInfo()'
-    >
-      <div class='v-card-thumb float-left mr-3'>
-        <img :src='source' :alt='card.name' class='py-2'>
-      </div>
-      <figcaption>
+      <figcaption ref='listDetails' v-if='mode === "list"'>
         <ul class='v-card-info py-2'>
           <li>
             <h5 class='m-0'>{{ card.name }}</h5>
@@ -81,7 +84,6 @@ export default {
 <style scoped>
 .app-card {
   width: 100%;
-  height: 45vh;
   position: relative;
 }
 
@@ -98,23 +100,32 @@ export default {
 }
 
 .app-card-list,
-.app-card-list .v-card-thumb,
 .app-card-list .v-card-thumb img {
   transition: height 400ms ease;
-  height: 6em;
 }
 
 .app-card-list .v-card-thumb {
+  width: 6em;
+  height: 6em;
+  transition: all 300ms ease 0s;
   text-align: center;
 }
 
-.app-card-list.details,
-.app-card-list.details .v-card-thumb,
-.app-card-list.details .v-card-thumb img {
-  height: 12em;
+.app-card-list .v-card-thumb img {
+  height: 100%;
 }
 
-.v-card-image, .v-card-image img, .app-card figcaption, .app-card .v-card-info {
+.app-card-list.details .v-card-thumb {
+  height: 12em;
+  width: 100%;
+  transition-delay: 300ms;
+}
+
+.v-card-image {
+  text-align: center;
+}
+
+.app-card figcaption, .app-card .v-card-info {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -128,6 +139,15 @@ export default {
 
 .v-card-info {
   width: 100%;
+}
+
+figcaption {
+  transition: padding 400ms ease 300ms;
+}
+
+.app-card-list.details figcaption {
+  padding-top: 12em;
+  transition-delay: 0s;
 }
 
 .v-card-image img {
@@ -199,10 +219,12 @@ export default {
 
 .v-card-moreinfo {
   opacity: 0;
-  transition: opacity 400ms ease;
+  height: 0;
+  transition: opacity 400ms ease, height 400ms ease;
 }
 
 .details .v-card-moreinfo {
   opacity: 1;
+  height: 7em;
 }
 </style>
