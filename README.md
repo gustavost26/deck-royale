@@ -28,6 +28,12 @@ Atualmente há dois modos de visualização disponíveis: **grade** (padrão) e 
 
 Como a API possui apenas a informação sobre 81 cards e os entrega num único pedido, não é necessário fazer muitos pedidos de rede. A maior parte do consumo de dados se dá pelo download das imagens dos cards. Destas, no mínimo 10 e no máximo 18 são baixadas logo na inicialização do app (10 delas são baixadas para a animação de embaralhamento, e outras 8 podem ser solicitadas dependendo do resultado do embaralhamento. No melhor cenário para o desempenho, os 8 cards aleatórios estão entre os 10 que foram baixados para a animação).
 
+## To do
+
+* Modularizar o componente `MainUI` (principalmente separar a responsabilidade de dispor o deck num novo componente)
+* Passar a usar roteamento de URI no lugar de fragmentos (eliminar a necessidade do `#` na URL e permitir que os decks sejam compartilhados com as APIs das redes sociais)
+* Detalhar melhor a documentação e separá-la em arquivos (usar um preprocessador de documentação?)
+
 ## Build Setup
 
 ``` bash
