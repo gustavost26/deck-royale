@@ -4,7 +4,7 @@
       <LoadingScreen class='loading' ref='loading' v-if='!loaded'/>
     </transition>
     <transition name='fade'>
-      <Deck v-if='loaded' :cards='cards'/>
+      <MainUI v-if='loaded' :cards='cards'/>
     </transition>
   </div>
 </template>
@@ -14,13 +14,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
 import LoadingScreen from './components/LoadingScreen';
-import Deck from './components/Deck';
+import MainUI from './components/MainUI';
 
 export default {
   name: 'App',
   components: {
     LoadingScreen,
-    Deck,
+    MainUI,
   },
   data() {
     return {
