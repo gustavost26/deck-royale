@@ -52,7 +52,8 @@
                   <span class='d-none d-sm-inline'>Get deck URL</span>
                 </button>
               </popper>
-              <input type='text' class='viewport-hide' :value='deckUrl' ref='deckCode'>
+              <input type='text' class='viewport-hide' readonly
+                :value='deckUrl' ref='deckCode'>
             </div>
           </div>
         </section>
