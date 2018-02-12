@@ -41,11 +41,7 @@
               Get link to deck
             </button>
           </popper>
-          <input type='text' :value='deckUrl'
-            style='position: fixed; top: 0; left: 0; transform: translateY(-100%);'
-            id='deck-code-output'
-            v-on:click='copyDeckUrl()'
-            v-on:input='loadDeckCode($event.target.value)'>
+          <input type='text' class='viewport-hide' :value='deckUrl' ref='deckCode'>
         </section>
       </div>
     </div>
@@ -109,6 +105,7 @@ export default {
       ],
       shuffling: false,
       listMode: 'full',
+      deckUrl: location.toString(),
     };
   },
   computed: {
@@ -116,9 +113,6 @@ export default {
       return b64.encode(
         this.suggestedDeck.map(card => card.idName).join(','),
       );
-    },
-    deckUrl() {
-      return window.location.toString();
     },
   },
   mounted() {
@@ -128,17 +122,14 @@ export default {
     }
 
     const hashWatch = (event) => {
-      this.loadDeckCode(event.newURL.substring(event.newURL.indexOf('#') + 1));
+      this.deckUrl = event.newURL;
+      this.loadDeckCode(this.deckUrl.substring(this.deckUrl.indexOf('#') + 1));
     };
-
-    removeEventListener('hashchange', hashWatch);
     addEventListener('hashchange', hashWatch);
   },
   methods: {
     copyDeckUrl() {
-      this.$refs.root.querySelector('#deck-code-output')
-        .select();
-
+      this.$refs.deckCode.select();
       document.execCommand('copy');
     },
     toggleListMode() {
@@ -269,5 +260,12 @@ export default {
 
 .fade {
   opacity: 0;
+}
+
+.viewport-hide {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-100%, -100%);
 }
 </style>
