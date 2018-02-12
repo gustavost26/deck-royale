@@ -7,13 +7,15 @@
             v-on:click='toggleListMode()'
             class='btn btn-royale btn-sm'
           >
-            <img :src='
-              listMode === "full"
-                ? "/static/list.svg"
-                : "/static/grid-three-up.svg"
-              '
+            <img src='/static/grid-three-up.svg'
               alt='Toggle view'
               style='height: 1em'
+              v-show='listMode === "list"'
+            >
+            <img src='/static/list.svg'
+              alt='Toggle view'
+              style='height: 1em'
+              v-show='listMode === "full"'
             >
             Toggle view
           </button>
