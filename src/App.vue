@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
 import LoadingScreen from './components/LoadingScreen';
