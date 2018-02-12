@@ -2,48 +2,59 @@
   <section class='app-deck container' ref='root'>
     <div class='row'>
       <div class='col-12'>
-        <section id='list-mode' class='my-3'>
-          <button
-            v-on:click='toggleListMode()'
-            class='btn btn-royale btn-sm'
-          >
-            <img src='/static/grid-three-up.svg'
-              alt='Toggle view'
-              style='height: 1em'
-              v-show='listMode === "list"'
-            >
-            <img src='/static/list.svg'
-              alt='Toggle view'
-              style='height: 1em'
-              v-show='listMode === "full"'
-            >
-            Toggle view
-          </button>
-          <button
-            v-on:click='shuffle()'
-            class='btn btn-warning btn-sm'
-          >
-            <img src='/static/random.svg' alt='Shuffle!' style='height: 1em'>
-            Shuffle!
-          </button>
-          <popper trigger='click' :options='{ placement: "bottom" }'>
-            <div class='popper'>
-              <section id='deck-code-info' class='m-2'>
-                <h5>
-                  <img src='/static/clipboard.svg' alt='Copied' style='height: 1em'>
-                  Copied to clipboard!
-                </h5>
-                <p>The current URL leads to the exact deck you see below.</p>
-              </section>
+        <section id='controls' class='my-3 container-fluid'>
+          <div class='row'>
+            <div class='col-4 text-center'>
+              <button
+                v-on:click='toggleListMode()'
+                class='mx-2 py-2 px-3 btn btn-secondary btn-sm'
+              >
+                <img src='/static/grid-three-up.svg'
+                  alt='Toggle view'
+                  style='height: 1.2em' class='mr-0 mr-sm-2'
+                  v-show='listMode === "list"'
+                >
+                <img src='/static/list.svg'
+                  alt='Toggle view'
+                  style='height: 1.2em' class='mr-0 mr-sm-2'
+                  v-show='listMode === "full"'
+                >
+                <span class='d-none d-sm-inline'>Toggle view</span>
+              </button>
             </div>
-            <button slot='reference' class='btn btn-royale btn-sm'
-              v-on:click='copyDeckUrl()'
-            >
-              <img src='/static/link-intact.svg' alt='Copy' style='height: 1em'>
-              Get link to deck
-            </button>
-          </popper>
-          <input type='text' class='viewport-hide' :value='deckUrl' ref='deckCode'>
+            <div class='col-4 text-center'>
+              <button
+                v-on:click='shuffle()'
+                class='mx-2 py-2 px-3 btn btn-warning btn-sm'
+              >
+                <img src='/static/random.svg' alt='Shuffle!'
+                  style='height: 1.2em' class='mr-0 mr-sm-2'>
+                <span class='d-none d-sm-inline'>Shuffle!</span>
+              </button>
+            </div>
+            <div class='col-4 text-center'>
+              <popper trigger='click' :options='{ placement: "bottom" }'>
+                <div class='popper'>
+                  <section id='deck-code-info' class='m-2'>
+                    <h5>
+                      <img src='/static/clipboard.svg' alt='Copied'
+                        style='height: 1.2em' class='mr-0 mr-sm-2'>
+                      Copied to clipboard!
+                    </h5>
+                    <p>The current URL leads to the exact deck you see below.</p>
+                  </section>
+                </div>
+                <button slot='reference' class='mx-2 py-2 px-3 btn btn-primary btn-sm'
+                  v-on:click='copyDeckUrl()'
+                >
+                  <img src='/static/link-intact.svg' alt='Copy'
+                    style='height: 1.2em' class='mr-0 mr-sm-2'>
+                  <span class='d-none d-sm-inline'>Get deck URL</span>
+                </button>
+              </popper>
+              <input type='text' class='viewport-hide' :value='deckUrl' ref='deckCode'>
+            </div>
+          </div>
         </section>
       </div>
     </div>
